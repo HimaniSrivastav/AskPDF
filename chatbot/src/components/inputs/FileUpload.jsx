@@ -1,8 +1,8 @@
-import { useContext, useState } from "react";
+import { useContext} from "react";
 import axios from "axios";
-import "../index.css";
+import "../../index.css";
 import { IoIosAddCircleOutline } from "react-icons/io";
-import { CheckContext } from "./store/checkProvider.jsx";
+import { CheckContext } from "../store/checkProvider";
 
 const FileInputComponent = () => {
   const { setFileUploaded, uploading, setUploading, setFileName } =

@@ -1,6 +1,6 @@
 import LogoImg from '../assets/logo.png';
 import { useContext } from 'react';
-import FileInputComponent from './Input';
+import FileInputComponent from '../components/inputs/FileUpload';
 import { CheckContext } from './store/checkProvider';
 const Header = () => {
   const {fileName,uploading}=useContext(CheckContext)
@@ -13,7 +13,6 @@ const Header = () => {
           {!uploading &&<p className='text-[#25b09d] text-[10px] sm:text-[1em]'>{fileName}</p>}
         <FileInputComponent/>
         </div>
-        
     </header>
   )
 }
