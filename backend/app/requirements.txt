@@ -1,0 +1,7 @@
+langchain 
+langchain-community 
+langchainhub 
+bs4
+langchain-google-vertexai
+pypdf
+python-dotenv
