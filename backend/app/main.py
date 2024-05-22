@@ -4,6 +4,11 @@ import shutil
 
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from utils import pdf_reader, chunk_document, store_docs_embeddings
+from utils import gemini_embeddings
+from utils import llm
+from prompts import prompt 
+from utils import create_chain 
 
 app = FastAPI()
 
@@ -20,26 +25,24 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-class Item(BaseModel):
-    name: str
-    description: str = None
-    price: float
-    tax: float = None
+
+class Sentence(BaseModel):
+    sentence: str
+
+sentences = [] 
+app.qa_chain = None  
+
 
 @app.get("/")
 async def read_root():
     return {"message": "Hello, World!"}
 
-class Sentence(BaseModel):
-    sentence: str
-
-sentences = []
 
 @app.post("/messages")
 async def collect_message(sentence: Sentence):
     sentences.append(sentence)
-    print("This is the ", sentences)
-    return {"message": "Message received"}
+    response = app.qa_chain.invoke({"input": str(sentence.sentence)})
+    return {"message": str(response['answer'])}
 
 @app.get("/messages")
 async def get_messages():
@@ -48,9 +51,18 @@ async def get_messages():
 @app.post("/upload-pdf")
 async def upload_pdf(pdf: UploadFile = File(...)):
     try:
-        with open(pdf.filename, "wb") as buffer:
-            shutil.copyfileobj(pdf.file, buffer)
-        print(pdf.filename)
+        file_location = f"tmp/{pdf.filename}"
+        with open(file_location, "wb+") as file_object:
+            file_object.write(pdf.file.read())
+
+        pages = pdf_reader(file_location)
+        document_chunks = chunk_document(pages)
+
+
+        vectorstore = store_docs_embeddings(document_chunks, gemini_embeddings)
+        retriever = vectorstore.as_retriever()
+        app.qa_chain = create_chain(llm, prompt, retriever)
+
         return JSONResponse(content={"message": "PDF uploaded successfully"})
     except Exception as e:
         return JSONResponse(content={"message": "Failed to upload PDF", "error": str(e)}, status_code=500)
