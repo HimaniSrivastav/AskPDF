@@ -13,13 +13,11 @@ React.js-based RAG application with a FastAPI backend and LangChain integration.
 
 ## Table of contents
 
-- [Features](#Features)
-- [PreRequisites](#Prerequisites)
-- [Installation](#Installation)
+- [Features](#features)
+- [PreRequisites](#prerequisites)
+- [Installation](#installation)
+- [ProjectStructure](#projectstructure)
 - [Usage](#usage)
-- [Project_Structure](#Project_Structure)
-- [API_Endpoints](#API_Endpoints)
-- [Liscence](#Liscence)
 ## Features
 
 - **PDF Document Processing**: Upload and process PDF documents.
@@ -83,6 +81,39 @@ To install RAG Application AIPlanet , follow these steps:
   npm run dev
 ```
 ### The development server will start running on "localhost:5173"
+## Project Structure
+```bash
+AIPLANET/
+│
+├── backend/
+│   ├──app 
+│   │     ├── _pychache_            
+│   │     ├── tmp/              
+│   │     ├── env          
+│   │     ├── main.py         
+│   │     ├── prompts.py         
+│   │     ├── requirements.txt    
+│   │     └── utils.py    
+│   └──venv
+│
+├── chatbot/
+│   ├── public/              
+│   ├── src/                 
+│   │   ├── assets/  
+│   │   ├── components/
+│   │   │     ├──inputs/
+│   │   │     │     ├── FileUpload.jsx
+│   │   │     │     ├── Message.jsx 
+│   │   │     ├──store  
+│   │   │     │     └── CheckProvider.jsx  
+│   │   │     └──Header.jsx         
+│   │   ├── App.jsx           
+│   │   ├── index.css           
+│   │   └── main.jsx         
+│   └── package.json        
+│
+└── README.md                
+```
 ## Usage
 
 - **Upload PDF Documents**: Use the frontend interface to upload PDF documents.
